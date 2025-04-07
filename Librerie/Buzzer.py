@@ -13,14 +13,13 @@ class BUZZER:
         self.pwm = PWM(Pin(pin_num, Pin.OUT))
         self.pwm.duty(0)  # Inizialmente spento
         
-    def play(self, melody, dur, vol = 50):
+    def play(self, melody, dur, duty=512):
         """
         Riproduce una melodia specifica per una durata e volume dati.
         melody: list, lista di frequenze delle note (in Hz)
         dur: int, durata in millisecondi
         vol: int, volume in percentuale (0-100)
         """
-        duty = self.vol_to_duty(vol)
         for note in melody:
             if note == 0:
                 self.pwm.duty(0) # Pausa
@@ -30,18 +29,18 @@ class BUZZER:
             sleep_ms(dur) # Durata della nota
         self.stop() # Ferma il suono alla fine
 
-    def play_note(self, note, dur, duty=512):
+    def play_note(self, note, dur=0, duty=512):
         """
         Riproduce un suono specifico per una durata e volume dati.
         note: int, frequenza della nota (in Hz)
         dur: int, durata in millisecondi
         duty: int, valore del ciclo di lavoro (0-1023), consigliabile 512
         """
-        duty = self.vol_to_duty(duty)
         self.pwm.freq(note)
         self.pwm.duty(duty)
-        sleep_ms(dur)
-        self.stop() 
+        if(dur!=0):
+            sleep_ms(dur)
+            self.stop() 
         
     def stop(self):
         self.pwm.duty(0)  # Spegne il suono
