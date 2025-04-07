@@ -30,30 +30,18 @@ class BUZZER:
             sleep_ms(dur) # Durata della nota
         self.stop() # Ferma il suono alla fine
 
-    def play_note(self, note, dur, vol = 50):
+    def play_note(self, note, dur, duty=512):
         """
         Riproduce un suono specifico per una durata e volume dati.
         note: int, frequenza della nota (in Hz)
         dur: int, durata in millisecondi
-        vol: int, volume in percentuale (0-100)
+        duty: int, valore del ciclo di lavoro (0-1023), consigliabile 512
         """
-        duty = self.vol_to_duty(vol)
+        duty = self.vol_to_duty(duty)
         self.pwm.freq(note)
         self.pwm.duty(duty)
         sleep_ms(dur)
         self.stop() 
-
-    def vol_to_duty(vol):
-        """"
-        Converte il volume in duty cycle.
-        vol: int, volume in percentuale (0-100)
-        return: int, duty cycle (0-1023)
-        """
-        if not (0 <= vol <= 100):
-            raise ValueError("Il volume deve essere compreso tra 0 e 100.")
-        if vol < 50:
-            print("Warning: Volume troppo basso, potrebbe non essere udibile.")
-        return int((vol / 100) * 1023)  # Convert volume to duty cycle (0-1023)
         
     def stop(self):
         self.pwm.duty(0)  # Spegne il suono
