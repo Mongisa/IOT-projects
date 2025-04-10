@@ -42,7 +42,7 @@ class Stepmotor:
             speed = 0
         elif speed > 100:
             speed = 100
-        sleepTime = self.minSpeed + (self.maxSpeed - self.minSpeed) * (speed / 100)
+        sleepTime = self.maxSpeed - (self.maxSpeed - self.minSpeed) * (speed / 100)
         
         if half:
             sequence = self.halfStepSequence
